@@ -6,8 +6,8 @@ library(RSQLite)
 library(sodium)
 
 #Get env variables
-DB_PATH        <- Sys.getenv("SM_DB_PATH") #, unset = "credentials.sqlite"
-ADMIN_USER     <- Sys.getenv("SM_ADMIN_USER")
+DB_PATH <- Sys.getenv("SM_DB_PATH", file.path(Sys.getenv("R_USER_DIR", tempdir()), "credentials.sqlite"))
+ADMIN_USER <- Sys.getenv("SM_ADMIN_USER")
 ADMIN_PASSWORD <- Sys.getenv("SM_ADMIN_PASSWORD")
 #Pool (only for sqlite, i think)
 pool <- dbPool(
