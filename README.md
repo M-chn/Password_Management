@@ -1,54 +1,68 @@
-# Password Management Shiny App
+# Password Management Shiny App <img src="https://csiontario.ca/wp-content/uploads/2022/03/logo-CSIO-black.svg" align="right" width=300 alt="" />
 
-This repository contains two example Shiny applications for password management using the [`shinymanager`](https://github.com/datastorm-open/shinymanager) package.
+**Description:**  
 
----
+This project contains two example Shiny applications for password management using the [`shinymanager`](https://github.com/datastorm-open/shinymanager) package.  
+It demonstrates how to securely store and manage user credentials in either a local SQLite database or a PostgreSQL database (e.g., AWS RDS). The apps are designed to be deployed on Posit Connect Cloud.  
 
-## `app.R` (SQLite Example)
+**Status:**  
 
-- **Use Case:**  
-  A local setup of a SQLite database for storing user credentials.
-- **How it works:**  
-  The app reads the SQLite database path and passphrase from environment variables (`SHINYMGR_DB_PATH` and `SHINYMGR_PASSPHRASE`).
+- `Active ▶️`: development and changes expected. Ready for Posit Connect deployment.  
+
+**Directory Structure:**  
+
+```
+.
+├── .gitignore
+├── .RData
+├── .Rhistory
+├── app.R
+├── app_postgres.R
+├── credentials.sqlite
+├── manifest.json
+├── Password_Management.Rproj
+└── README.md
 
 
----
+```
 
-## `app_postgres.R` (PostgreSQL Example)
 
-- **Use Case:**  
-  Designed for use with a PostgreSQL database, such as AWS RDS, for storing user credentials.
-- **How it works:**  
-  The app expects PostgreSQL connection details (host, port, database, user, password) to be provided via environment variables (`PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`).
-- **Note:**  
-  The PostgreSQL database connection is not setup and would require the public accessibility and the appropriate security group settings (inbound rules) in AWS. (Didn't have access to creating/editting VPC settings)
+**Environment Variables:**  
 
----
+- **SQLite App (`app.R`)**  
+  - `SHINYMGR_DB_PATH` – Path to SQLite database file  
+  - `SHINYMGR_PASSPHRASE` – Passphrase for encrypting the SQLite database  
 
-## Deployment & Usage
+- **PostgreSQL App (`app_postgres.R`)**  
+  - `PGHOST` – Hostname of PostgreSQL server  
+  - `PGPORT` – Port number  
+  - `PGDATABASE` – Database name 
+  - `PGUSER` – Database username  
+  - `PGPASSWORD` – Database password  
+
+> Note: PostgreSQL deployment requires public accessibility and correct security group settings in AWS.  
+
+**Deployment & Usage:**  
 
 1. **Sync with Posit Connect Cloud:**  
-   To use these apps in production, sync your github repository with Posit Connect.
+   Connect your GitHub repository to Posit Connect to deploy the app.  
 
 2. **Set Environment Variables:**  
-   In the Posit Connect dashboard, add the required environment variables for your chosen app:
-   - For `app.R`:  
-     - `SHINYMGR_DB_PATH`
-     - `SHINYMGR_PASSPHRASE`
-   - For `app_postgres.R`:  
-     - `PGHOST`
-     - `PGPORT`
-     - `PGDATABASE`
-     - `PGUSER`
-     - `PGPASSWORD`
+   Add the required environment variables in the Posit Connect dashboard according to the app being used (see above).  
 
 3. **Manifest File:**  
-   Whenever you make changes to your app or its dependencies, re-run the creation of `manifest.json` , ```rsconnect::writeManifest()``` to ensure Posit Connect recognizes the correct package requirements and app metadata.
+   After changes to the app or dependencies, re-run `rsconnect::writeManifest()` to update `manifest.json` so Posit Connect recognizes package requirements.  
 
+**Additional Documents:**  
+
+- [`shinymanager` GitHub Documentation](https://github.com/datastorm-open/shinymanager)  
+
+**Additional Notes:**  
+
+- PostgreSQL database currently uses a table called `credentials` – can/should be renamed.  
+- SQLite database table must be created locally and uploaded along with the app.
+- Easily should be able to wrap the app.r in shinymanager's admin mode and access the SQLite DB from the app directly. This is my current recommendation for this project.
+
+**Maintainers & Contacts:**  
+- Repository Maintainer: Manjot
 ---
-
-## Additional Notes
-
-- Currently postgres using a database called `credentials`, can/should be changed
-- SQLite table should be created locally and then uploaded along with the app.
- 
